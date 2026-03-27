@@ -4,7 +4,9 @@ import { workerData, parentPort  } from 'node:worker_threads';
 
 const kafka = new Kafka({
 								clientId: 'bets-aggregator-worker-1',
-								brokers: ['PLAINTEXT://kafka-broker.railway.internal:9092']
+								brokers: [
+																'kafka-broker.railway.internal:9092',
+																'gondola.proxy.rlwy.net:28120']
 });
 
 const consumer = kafka.consumer({ groupId : 'bets-aggregator-group' })
