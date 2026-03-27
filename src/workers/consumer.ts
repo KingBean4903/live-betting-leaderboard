@@ -1,4 +1,4 @@
-import { Kafka , EachMessagePayload } from 'kafkaj';
+import { Kafka , EachMessagePayload } from 'kafkajs';
 
 const kafka = new Kafka({
 								clientId: '',
