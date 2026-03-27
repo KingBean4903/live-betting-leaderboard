@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import { KafkaProducer  } from './workers/producer'
+import { KafkaProducer  } from './workers/producer.js'
 
 
 const fastify = Fastify({
