@@ -6,7 +6,7 @@ const fastify = Fastify({
 								logger: true
 })
 
-fastify.post('/bet', async (request, reply) {
+fastify.post('/bet', async (request, reply) => {
 
 								const { body } = request;
 								
@@ -18,11 +18,11 @@ fastify.post('/bet', async (request, reply) {
 
 })
 
-fastify.get('/bet/status', (request, reply) {
+fastify.get('/bet/status', (request, reply) => {
 
 })
 
-fastify.get('/leaderboard', (request, reply) {
+fastify.get('/leaderboard', (request, reply) => {
 
 })
 
