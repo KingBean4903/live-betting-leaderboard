@@ -41,6 +41,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-				"include": ["**/*.ts"],
-				"exclude": ["dist", "**/*.ts", "**/*.spec.ts"]
+				"include": ["src/**/*"],
+				"exclude": ["dist"]
 }
