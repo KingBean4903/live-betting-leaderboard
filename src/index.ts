@@ -6,7 +6,7 @@ const fastify = Fastify({
 								logger: true
 })
 
-const PORT = process.env.PORT || 6500;
+const PORT = 6500;
 
 fastify.post('/bet', async (request, reply) => {
 
