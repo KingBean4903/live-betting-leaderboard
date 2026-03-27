@@ -1,4 +1,5 @@
-import { Kafka, Producer } from 'kafkajs'
+import { Kafka } from 'kafkajs'
+import type {  Producer } from 'kafkajs'
 
 export class KafkaProducer {
 
