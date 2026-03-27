@@ -9,7 +9,7 @@ export class KafkaProducer {
 								constructor(topic: string, brokers: string[]) {
 																this.topic = topic;
 																this.producer = new Kafka({
-																								clientId: 'app',
+																								clientId: 'bet-api-producer-1',
 																								brokers
 																}).producer();
 								}
@@ -18,10 +18,10 @@ export class KafkaProducer {
 																await this.producer.connect()
 								}
 
-								public async send(value: any) {
+								public async send(value: any, key: string = 'aviator') {
 																await this.producer.send({
 																								topic: this.topic,
-																								messages: [ value ]
+																								messages: [ { key , value } ]
 																});
 								}
 
