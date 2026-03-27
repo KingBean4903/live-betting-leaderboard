@@ -32,6 +32,8 @@ fastify.post('/bet', async (request, reply) => {
 
 fastify.get('/bet/status', async (request, reply) => {
 
+								return 'Bet Placed successfully'
+
 })
 
 fastify.get('/leaderboard', async (request, reply) => {
