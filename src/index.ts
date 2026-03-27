@@ -44,7 +44,7 @@ fastify.post('/bet', async (request, reply) => {
 																								])
 
 																await producer.connect();
-																await producer.send(body);
+																await producer.send(body, "aviator");
 
 
 																return 'success'
