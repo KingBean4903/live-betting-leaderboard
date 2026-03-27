@@ -11,7 +11,7 @@ const PORT = Number(process.env.PORT) || 6500;
 const consumerWorker = async () => {
 
 								return new Promise((resolve, reject) => {
-																const worker = new Worker('./workers/consumer.js');
+																const worker = new Worker('workers/consumer.js');
 
 																worker.on('message', resolve);
 																worker.on('error', reject);
