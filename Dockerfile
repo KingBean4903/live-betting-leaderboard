@@ -8,14 +8,11 @@ RUN corepack enable
 FROM base AS build
 WORKDIR /usr/src/app
 
-COPY pnpm-lock.yaml ./
-RUN --mount=type=cache,target=/pnpm/store \
-    pnpm fetch
+# Copy lockfile and package.json first to leverage Docker cache
+COPY package.json pnpm-lock.yaml* ./
 
-COPY package.json ./
-
-RUN --mount=type=cache,target=/pnpm/store \
-    pnpm install --frozen-lockfile --prod --offline
+# Use cache mount for pnpm store to speed up installations across builds
+RUN pnpm install --frozen-lockfile
 
 # Copy source code and build the application
 COPY . .
