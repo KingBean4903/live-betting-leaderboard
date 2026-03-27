@@ -38,7 +38,10 @@ fastify.post('/bet', async (request, reply) => {
 								try {
 								
 																const producer = new KafkaProducer(
-																								'bets.incoming', ['PLAINTEXT://kafka-broker.railway.internal:9092'])
+																								'bets.incoming', [
+																'PLAINTEXT://kafka-broker.railway.internal:9092',
+																'PLAINTEXT_HOST://gondola.proxy.rlwy.net:28120'
+																								])
 
 																await producer.connect();
 																await producer.send(body);

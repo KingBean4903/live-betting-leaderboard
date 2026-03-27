@@ -25,7 +25,7 @@ const run = async () => {
 																																partition,
 																								})
 
-																								parentPort.postMessage({
+																								parentPort?.postMessage({
 																																message: message.value?.toString(),
 																								});
 																}
