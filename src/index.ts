@@ -9,14 +9,22 @@ const fastify = Fastify({
 fastify.post('/bet', async (request, reply) => {
 
 								const { body } = request;
+
+								try {
 								
-								const producer = new KafkaProducer(
-																'bets.incoming', ['PLAINTEXT://kafka-broker.railway.internal:9092'])
+																const producer = new KafkaProducer(
+																								'bets.incoming', ['PLAINTEXT://kafka-broker.railway.internal:9092'])
 
-								await producer.connect();
-								await producer.send(body);
+																await producer.connect();
+																await producer.send(body);
 
-								return 'success'
+
+																return 'success'
+
+								} catch(err) {
+																return `Failed ${err}`
+								}
+
 
 })
 
