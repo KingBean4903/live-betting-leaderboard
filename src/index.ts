@@ -16,6 +16,8 @@ fastify.post('/bet', async (request, reply) => {
 								await producer.connect();
 								await producer.send(body);
 
+								return 'success'
+
 })
 
 fastify.get('/bet/status', (request, reply) => {
