@@ -6,6 +6,8 @@ const fastify = Fastify({
 								logger: true
 })
 
+const PORT = process.env.PORT || 6500;
+
 fastify.post('/bet', async (request, reply) => {
 
 								const { body } = request;
@@ -28,22 +30,25 @@ fastify.post('/bet', async (request, reply) => {
 
 })
 
-fastify.get('/bet/status', (request, reply) => {
+fastify.get('/bet/status', async (request, reply) => {
 
 })
 
-fastify.get('/leaderboard', (request, reply) => {
+fastify.get('/leaderboard', async (request, reply) => {
 
 })
 
-fastify.get('/', function(request, reply) {
+fastify.get('/', async (request, reply) => {
 								reply.send({ hello: 'world' })
 })
 
-fastify.listen({ port: 3000 }, function(err ,address) {
-
-								if (err) {
-																fastify.log.error(err)
-																process.exit()
+const start = async () => {
+								try {
+																await fastify.listen({ port: PORT })
+								} catch(err) {
+																fastify.log(err)
+																process.exit(1)
 								}
-})
+}
+
+start();
