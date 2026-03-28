@@ -2,7 +2,7 @@ import { Kafka } from 'kafkajs';
 import type { EachMessagePayload  } from 'kafkajs';
 import { workerData, parentPort  } from 'node:worker_threads';
 import fs from 'fs';
-import { redis } from './dist/redis/redis.js';
+import { redis } from '../redis/redis.js';
 
 const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
 const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
@@ -38,11 +38,11 @@ const run = async () => {
 								})
 								} catch(error) {
 																console.log('Error: ', error);
-																throw new Error(`${error?.message}`);
+																throw new Error(`Failed Reading from Kafka`);
 								}
 }
 
- const voteRedis = async (message) =>  {
+ const voteRedis = async (message: any) =>  {
 
 								const vote = JSON.parse(message.value?.toString());
 
@@ -63,10 +63,10 @@ const run = async () => {
 																								throw new Error('Duplicate vote detected')
 																}
 
-								} catch(err)  {
-																if (err.message.includes('NOSCRIPT')) {
+								} catch(err: any)  {
+																if (err?.message.includes('NOSCRIPT')) {
 																								const voteLuaScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
-																								const res = await redis.evalsha(
+																								const result = await redis.evalsha(
 																																voteScriptSha, 
 																																numKeys,
 																																[lbKey, processedKey],

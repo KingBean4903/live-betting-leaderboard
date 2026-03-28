@@ -1,12 +1,11 @@
 import { Redis } from 'ioredis'
-import dotenv from 'dotenv';
 
-dotenv.config();
+const port: number = process.env.REDISPORT || 6379
 
 export const redis = new Redis({
-								port: process.env.REDISPORT,
-								host: process.env.REDISHOST,
-								username: process.env.REDISUSER,
-								password: process.env.REDIS_PASSWORD
+								port: port,
+								host: process.env.REDISHOST as string,
+								username: process.env.REDISUSER as string,
+								password: process.env.REDIS_PASSWORD as string
 });
 
