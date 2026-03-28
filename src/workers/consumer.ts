@@ -15,7 +15,7 @@ const redis = new Redis({
 
 
 const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
-const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
+const voteScriptSha: string | Buffer = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 
 const kafka = new Kafka({
 								clientId: 'votes-aggregator-worker-1',
@@ -76,7 +76,7 @@ const run = async () => {
 
 								} catch(err: any)  {
 																if (err?.message.includes('NOSCRIPT')) {
-																								const voteLuaScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
+																								const voteLuaScriptSha: string | Buffer = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 																								const result = await redis.evalsha(
 																																voteLuaScriptSha, 
 																																numKeys,
