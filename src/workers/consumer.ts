@@ -31,17 +31,18 @@ const run = async () => {
 																																value: message.value?.toString(),
 																																topic,
 																																partition,
-																								})
-																								voteRedis(message)
+																								});
+
+																								await voteRedis(message);
 																}
 								})
 								} catch(error) {
-																console.log('Error: ', error)
-																throw error;
+																console.log('Error: ', error);
+																throw new Error(`${error?.message}`);
 								}
 }
 
- async voteRedis(message) {
+ const voteRedis = async (message) =>  {
 
 								const vote = JSON.parse(message.value?.toString());
 
