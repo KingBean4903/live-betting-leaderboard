@@ -14,7 +14,7 @@ const redis = new Redis({
 });
 
 
-const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
+const VOTE_SCRIPT_LUA = fs.readFileSync('../redis/vote.lua', 'utf8');
 const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 
 const kafka = new Kafka({
