@@ -21,7 +21,7 @@ export class KafkaProducer {
 								public async send(value: any, key: string = "aviator") {
 																await this.producer.send({
 																								topic: this.topic,
-																								messages: [ { "key": key, "value": value.toString() } ]
+																								messages: [ "key": key, "value":  JSON.stringify(value) } ]
 																});
 								}
 
