@@ -63,9 +63,13 @@ fastify.post('/api/vote', async (request, reply) => {
 
 })
 
-fastify.get('/api/leaderboard/:categoryId', async (request, reply) => {
+interface ParamsType {
+								categoryId: string;
+}
+
+fastify.get<{ Params: ParamsType}>('/api/leaderboard/:categoryId', async (request, reply) => {
 								
-								const categoryId  = request.params?.categoryId;
+								const { categoryId } = request.params;
 
 								const key = `leaderboard:oscars:${categoryId}` 
 								const top10 = await redis.zrevrange(key, 0 , 9, "WITHSCORES")
