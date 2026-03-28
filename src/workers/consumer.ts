@@ -60,10 +60,10 @@ const run = async () => {
 								const nomineeId = `${vote?.nomineeId}`;
 								const voteId    = `${vote?.voteId}`;
 
-								const keys = [
+								const keys = JSON.stringify([
 															 `leaderboard:oscars:${vote?.categoryId}`,
 																`votes:processed:${vote?.categoryId}`
-								]
+								]);
 								
 								const args = JSON.stringify([nomineeId, voteId]);
 
