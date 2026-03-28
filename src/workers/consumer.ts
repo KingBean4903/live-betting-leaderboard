@@ -57,19 +57,23 @@ const run = async () => {
 								const vote = JSON.parse(message.value?.toString());
 
 								const numKeys: number = 2;
-								const lbKey   =  `leaderboard:oscars:${vote?.categoryId}`;
-								const processedKey = `votes:processed:${vote?.categoryId}`;
-								const nomineeId = vote?.nomineeId;
-								const voteId    = vote?.voteId;
+								const nomineeId = `${vote?.nomineeId}`;
+								const voteId    = `${vote?.voteId}`;
+
+								const keys = [
+															 `leaderboard:oscars:${vote?.categoryId}`,
+																`votes:processed:${vote?.categoryId}`
+								]
+								
+								const args = [nomineeId, voteId]
 
 								try { 
 
 																const result = await redis.evalsha(
 																																																`${voteScriptSha}`, 
 																																																numKeys,
-																																																[`${lbKey}`, `${processedKey}`],
-																																																[`${nomineeId}`, `${voteId}`]
-																																								);
+																																																keys,
+																																																args);
 
 																if (result === 0) {
 																								throw new Error('Duplicate vote detected')
@@ -81,8 +85,8 @@ const run = async () => {
 																								const result = await redis.evalsha(
 																																`${voteLuaScriptSha}`, 
 																																numKeys,
-																																[`${lbKey}`, `${processedKey}`],
-																																[`${nomineeId}`, `${voteId}`]);
+																																keys,
+																																args);
 
 																								if (result === 0) {
 																																throw new Error('Duplicate vote detected')
