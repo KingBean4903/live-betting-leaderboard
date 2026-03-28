@@ -2,16 +2,6 @@ import { Kafka } from 'kafkajs';
 import type { EachMessagePayload  } from 'kafkajs';
 import { workerData, parentPort  } from 'node:worker_threads';
 import fs from 'fs';
-import { Redis } from 'ioredis'
-
-const port: number = Number(process.env.REDISPORT) || 6379
-
-export const redis = new Redis({
-								port: port,
-								host: process.env.REDISHOST as string,
-								username: process.env.REDISUSER as string,
-								password: process.env.REDIS_PASSWORD as string
-});
 
 const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
 const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
@@ -26,7 +16,7 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId : 'bets-aggregator-group' })
 
-async run(){
+const run = async () => {
 
 								try {
 
@@ -41,8 +31,50 @@ async run(){
 																																topic,
 																																partition,
 																								});
+																								
+																								const vote = JSON.parse(message.value?.toString());
 
-																								await voteRedis(message);
+																								const numKeys = 2;
+																								const lbKey   =  `leaderboard:oscars:${vote?.categoryId}`;
+																								const processedKey = `votes:processed:${vote?.categoryId}`;
+																								const { nomineeId , voteId } = vote;
+
+																								try { 
+
+																																const result = await redis.evalsha(
+																																																																voteScriptSha, 
+																																																																numKeys,
+																																																																[lbKey, processedKey],
+																																																																[nomineeId, voteId]
+																																																								);
+
+																																if (result === 0) {
+																																								throw new Error('Duplicate vote detected')
+																																}
+
+																								} catch(err: any)  {
+																																if (err?.message.includes('NOSCRIPT')) {
+																																								const voteLuaScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
+																																								const result = await redis.evalsha(
+																																																voteLuaScriptSha, 
+																																																numKeys,
+																																																[lbKey, processedKey],
+																																																[nomineeId, voteId]);
+
+																																								if (result === 0) {
+																																																throw new Error('Duplicate vote detected')
+																																								}
+
+																																} else {
+																																								console.log(`Vote error : ${err}`);
+																																								throw err;
+																																}	
+																								}
+
+
+
+
+
 																}
 								})
 								} catch(error) {
@@ -51,7 +83,7 @@ async run(){
 								}
 }
 
- async voteRedis(message: any)  {
+ const voteRedis = async (message: any) =>  {
 
 								const vote = JSON.parse(message.value?.toString());
 
