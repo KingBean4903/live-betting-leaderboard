@@ -26,7 +26,7 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId : 'bets-aggregator-group' })
 
-const run = async () => {
+async run(){
 
 								try {
 
@@ -51,7 +51,7 @@ const run = async () => {
 								}
 }
 
- async voteRedis(message: any) {
+ async voteRedis(message: any)  {
 
 								const vote = JSON.parse(message.value?.toString());
 
