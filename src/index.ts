@@ -1,6 +1,10 @@
 import Fastify from 'fastify';
 import { KafkaProducer  } from './workers/producer.js'
 import { Worker } from 'node:worker_threads'; 
+import { redis } from './redis/redis.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const fastify = Fastify({
 								logger: true
@@ -31,40 +35,48 @@ async function runConsumer() {
 								}
 }
 
-fastify.post('/bet', async (request, reply) => {
+fastify.post('/api/vote', async (request, reply) => {
 
 								const { body } = request;
 
 								try {
 								
 																const producer = new KafkaProducer(
-																								'bets.incoming', [
-																'kafka-broker.railway.internal:9092',
-																'gondola.proxy.rlwy.net:28120'
+																								'votes.incoming', 
+																								[
+																																process.env.KAFKA_BROKER_1,
+																																process.env.KAFKA_BROKER_2,
 																								])
 
 																await producer.connect();
 																await producer.send(body, "aviator");
 
 
-																return 'success'
-
+												return { 
+																								"status"  : "success", 
+																								"message" : "Vote Counted" 
+																}
 								} catch(err) {
-																return `Failed ${err}`
+																return { "status" : 404, "message": `${err}` }
 								}
 
 
 })
 
-fastify.get('/bet/status', async (request, reply) => {
+fastify.get('/api/leaderboard/:categoryId', async (request, reply) => {
+								
+								const { categoryId } = request.params;
 
-								return 'Bet Placed successfully'
+								const key = `leaderboard:oscars:${categoryId}` 
+								const top10 = await redis.zRevRange(key, 0 , 9)
 
+								return {
+																"categoryId": categoryId,
+																"top" : top10,
+								}
+								
 })
 
-fastify.get('/leaderboard', async (request, reply) => {
-
-})
 
 fastify.get('/', async (request, reply) => {
 								reply.send({ hello: 'world' })

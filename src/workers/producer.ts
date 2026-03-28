@@ -9,7 +9,7 @@ export class KafkaProducer {
 								constructor(topic: string, brokers: string[]) {
 																this.topic = topic;
 																this.producer = new Kafka({
-																								clientId: 'bet-api-producer-1',
+																								clientId: 'votes-api-producer-1',
 																								brokers
 																}).producer();
 								}
