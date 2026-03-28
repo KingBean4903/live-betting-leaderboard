@@ -51,7 +51,7 @@ const run = async () => {
 								}
 }
 
- const voteRedis = async (message: any) =>  {
+ async voteRedis(message: any) {
 
 								const vote = JSON.parse(message.value?.toString());
 
