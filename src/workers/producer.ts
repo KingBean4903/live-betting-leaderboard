@@ -18,10 +18,10 @@ export class KafkaProducer {
 																await this.producer.connect()
 								}
 
-								public async send(value: any, key: string = "aviator") {
+								public async send(value: any, key: string = "oscars") {
 																await this.producer.send({
 																								topic: this.topic,
-																								messages: [ "key": key, "value":  JSON.stringify(value) } ]
+																								messages: [ { "key": key, "value":  JSON.stringify(value) } ]
 																});
 								}
 
