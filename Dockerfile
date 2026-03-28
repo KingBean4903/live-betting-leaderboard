@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml* ./
 
 # Use cache mount for pnpm store to speed up installations across builds
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copy source code and build the application
 COPY . .
