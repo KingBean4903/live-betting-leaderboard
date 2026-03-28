@@ -4,7 +4,7 @@ import { workerData, parentPort  } from 'node:worker_threads';
 import fs from 'fs';
 import { redis } from '../redis/redis.js';
 
-const VOTE_SCRIPT_LUA = fs.readFileSync('../redis/vote.lua', 'utf8');
+const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
 const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 
 const kafka = new Kafka({
@@ -54,10 +54,11 @@ const run = async () => {
 								try { 
 
 																const result = await redis.evalsha(
-																								voteScriptSha, 
-																								numKeys,
-																								[lbKey, processedKey],
-																								[nomineeId, voteId]);
+																																																voteScriptSha, 
+																																																numKeys,
+																																																[lbKey, processedKey],
+																																																[nomineeId, voteId]
+																																								);
 
 																if (result === 0) {
 																								throw new Error('Duplicate vote detected')
@@ -67,7 +68,7 @@ const run = async () => {
 																if (err?.message.includes('NOSCRIPT')) {
 																								const voteLuaScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 																								const result = await redis.evalsha(
-																																voteScriptSha, 
+																																voteLuaScriptSha, 
 																																numKeys,
 																																[lbKey, processedKey],
 																																[nomineeId, voteId]);
