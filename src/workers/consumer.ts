@@ -4,7 +4,7 @@ import { workerData, parentPort  } from 'node:worker_threads';
 import fs from 'fs';
 import { redis } from '../redis/redis.js';
 
-const VOTE_SCRIPT_LUA = fs.readFileSync('./dist/redis/vote.lua', 'utf8');
+const VOTE_SCRIPT_LUA = fs.readFileSync('../redis/vote.lua', 'utf8');
 const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 
 const kafka = new Kafka({
