@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsx --watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc && copyfiles -u 1 \"src/**/*.lua\" dist",
+    "build": "tsc && pnpm exec copyfiles -u 1 \"src/**/*.lua\" dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -27,6 +27,7 @@
     "@tsconfig/node22": "^22.0.5",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
+    "copyfiles": "^2.4.1",
     "typescript": "^6.0.2"
   }
 }
