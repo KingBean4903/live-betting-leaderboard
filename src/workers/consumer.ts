@@ -65,7 +65,7 @@ const run = async () => {
 																`votes:processed:${vote?.categoryId}`
 								]
 								
-								const args = [nomineeId, voteId]
+								const args = JSON.stringify([nomineeId, voteId]);
 
 								try { 
 
