@@ -7,4 +7,4 @@ const redis = new Redis({
 								password: process.env.REDIS_PASSWORD
 });
 
-export redis;redis
+export redis
