@@ -10,8 +10,8 @@ const voteScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 const kafka = new Kafka({
 								clientId: 'votes-aggregator-worker-1',
 								brokers: [
-																process.env.KAFKA_BROKER_1,
-																process.env.KAFKA_BROKER_2
+																process.env.KAFKA_BROKER_1 as string,
+																process.env.KAFKA_BROKER_2 as string
 								]
 });
 
@@ -41,7 +41,7 @@ const run = async () => {
 								}
 }
 
-function voteRedis(message) {
+ await voteRedis(message) {
 
 								const vote = JSON.parse(message.value?.toString());
 
@@ -52,7 +52,7 @@ function voteRedis(message) {
 
 								try { 
 
-																const res = await redis.evalsha(
+																const result = await redis.evalsha(
 																								voteScriptSha, 
 																								numKeys,
 																								[lbKey, processedKey],
@@ -66,10 +66,15 @@ function voteRedis(message) {
 																if (err.message.includes('NOSCRIPT')) {
 																								const voteLuaScriptSha = await redis.script("LOAD", VOTE_SCRIPT_LUA);
 																								const res = await redis.evalsha(
-																								voteScriptSha, 
-																								numKeys,
-																								[lbKey, processedKey],
-																								[nomineeId, voteId]);
+																																voteScriptSha, 
+																																numKeys,
+																																[lbKey, processedKey],
+																																[nomineeId, voteId]);
+
+																								if (result === 0) {
+																																throw new Error('Duplicate vote detected')
+																								}
+
 																} else {
 																								console.log(`Vote error : ${err}`);
 																								throw err;

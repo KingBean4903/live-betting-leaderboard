@@ -44,8 +44,8 @@ fastify.post('/api/vote', async (request, reply) => {
 																const producer = new KafkaProducer(
 																								'votes.incoming', 
 																								[
-																																process.env.KAFKA_BROKER_1,
-																																process.env.KAFKA_BROKER_2,
+																																process.env.KAFKA_BROKER_1 as string,
+																																process.env.KAFKA_BROKER_2 as string,
 																								])
 
 																await producer.connect();
