@@ -56,7 +56,7 @@ const run = async () => {
 
 								const vote = JSON.parse(message.value?.toString());
 
-								const numKeys = 2;
+								const numKeys: number = 2;
 								const lbKey   =  `leaderboard:oscars:${vote?.categoryId}`;
 								const processedKey = `votes:processed:${vote?.categoryId}`;
 								const { nomineeId , voteId } = vote;
