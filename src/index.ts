@@ -1,10 +1,16 @@
 import Fastify from 'fastify';
 import { KafkaProducer  } from './workers/producer.js'
 import { Worker } from 'node:worker_threads'; 
-import { redis } from './redis/redis.js';
-import dotenv from 'dotenv';
+import { Redis } from 'ioredis'
 
-dotenv.config();
+const port: number = Number(process.env.REDISPORT) || 6379
+
+const redis = new Redis({
+								port: port,
+								host: process.env.REDISHOST as string,
+								username: process.env.REDISUSER as string,
+								password: process.env.REDIS_PASSWORD as string
+});
 
 const fastify = Fastify({
 								logger: true
