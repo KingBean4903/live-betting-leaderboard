@@ -59,7 +59,8 @@ const run = async () => {
 								const numKeys: number = 2;
 								const lbKey   =  `leaderboard:oscars:${vote?.categoryId}`;
 								const processedKey = `votes:processed:${vote?.categoryId}`;
-								const { nomineeId , voteId } = vote;
+								const nomineeId = vote?.nomineeId;
+								const voteId    = vote?.voteId;
 
 								try { 
 
