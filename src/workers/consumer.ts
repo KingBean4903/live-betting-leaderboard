@@ -66,8 +66,8 @@ const run = async () => {
 																const result = await redis.evalsha(
 																																																`${voteScriptSha}`, 
 																																																numKeys,
-																																																[lbKey, processedKey],
-																																																[nomineeId, voteId]
+																																																[`${lbKey}`, `${processedKey}`],
+																																																[`${nomineeId}`, `${voteId}`]
 																																								);
 
 																if (result === 0) {
@@ -80,8 +80,8 @@ const run = async () => {
 																								const result = await redis.evalsha(
 																																`${voteLuaScriptSha}`, 
 																																numKeys,
-																																[lbKey, processedKey],
-																																[nomineeId, voteId]);
+																																[`${lbKey}`, `${processedKey}`],
+																																[`${nomineeId}`, `${voteId}`]);
 
 																								if (result === 0) {
 																																throw new Error('Duplicate vote detected')
